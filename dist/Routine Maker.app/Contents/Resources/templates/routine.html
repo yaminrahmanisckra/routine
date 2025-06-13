@@ -1,0 +1,732 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="mb-4 text-center">
+                <h4 class="mb-1">Law Discipline</h4>
+                <h5 class="mb-1">Khulna University</h5>
+                <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 mb-2">
+                    <span>Class Routine of</span>
+                    <input id="routine-title" type="text" class="form-control d-inline-block" style="width:200px;" placeholder="e.g. 2nd Year, Term 1">
+                    <span>Effective from</span>
+                    <input id="routine-date" type="date" class="form-control d-inline-block" style="width:150px;" placeholder="DD/MM/YYYY">
+                </div>
+            </div>
+            <div class="mb-3 d-flex gap-2">
+                <button id="save-routine-btn" class="btn btn-success">Save Routine</button>
+                <button id="download-pdf-btn" class="btn btn-primary">Download PDF</button>
+                <button id="clear-routine-btn" class="btn btn-danger">Clear Routine</button>
+                <button id="export-routine-btn" class="btn btn-secondary">Export Routine</button>
+                <input type="file" id="import-routine-input" style="display:none" accept="application/json">
+                <button id="import-routine-btn" class="btn btn-secondary">Import Routine</button>
+            </div>
+            <h2>Routine</h2>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped align-middle" id="routine-table">
+                        <thead>
+                            <tr>
+                                <th>Day</th>
+                                <th>Room</th>
+                            <th>9:10-10:00 AM</th>
+                            <th>10:10-11:00 AM</th>
+                            <th>11:10-12:00 PM</th>
+                            <th>12:10-1:00 PM</th>
+                            <th>1:00-1:50 PM<br><span style="font-size:0.85em;">Lunch Break</span></th>
+                            <th>2:00-2:50 PM</th>
+                            <th>3:00-3:50 PM</th>
+                            <th>4:00-4:50 PM</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for day in days %}
+                                {% for room in rooms %}
+                            {% set room_idx = loop.index0 %}
+                                <tr class="{% if room_idx == rooms|length - 1 %}day-end{% endif %}">
+                                {% if room_idx == 0 %}
+                                    <td rowspan="{{ rooms|length }}" class="align-middle">{{ day }}</td>
+                                    {% endif %}
+                                <td>{{ room.name }}</td>
+                                {% for slot in range(8) %}
+                                    {% if slot == 4 %}
+                                        {% if room_idx == 0 %}
+                                            <td class="routine-slot" data-day="{{ day }}" data-slot="4" data-room="{{ room.id }}" style="background-color: #f8f9fa; font-weight: bold;" data-lunch="true">LUNCH BREAK</td>
+                                        {% else %}
+                                            <td style="background-color: #f8f9fa;" data-lunch="true"></td>
+                                        {% endif %}
+                                    {% elif day == 'Tuesday' and slot == 5 %}
+                                        {% if room_idx == 0 %}
+                                            <td class="routine-slot" data-day="{{ day }}" data-slot="5" data-room="{{ room.id }}" style="background-color: #e9ecef; font-weight: bold; text-align: center;" data-meeting="true">Academic Committee Meeting</td>
+                                        {% else %}
+                                            <td class="routine-slot" data-day="{{ day }}" data-slot="5" data-room="{{ room.id }}" style="text-align: center;">-</td>
+                                        {% endif %}
+                                        {% else %}
+                                        <td class="routine-slot" 
+                                            data-day="{{ day }}" 
+                                            data-slot="{{ slot }}" 
+                                            data-room="{{ room.id }}"
+                                            style="text-align: center;"
+                                        >-</td>
+                                        {% endif %}
+                                {% endfor %}
+                            </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div id="sticky-subjects" class="sticky-top" style="top: 20px;">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Subjects</h5>
+                    </div>
+                    <div class="card-body">
+                <div class="mb-3">
+                    <label for="teacher-select" class="form-label">Select Teacher</label>
+                    <select id="teacher-select" class="form-select">
+                                <option value="">-- Select Teacher --</option>
+                                {% for teacher in teachers_json %}
+                                <option value="{{ teacher.id }}">{{ teacher.callsign }} ({{ teacher.name }})</option>
+                                {% endfor %}
+                    </select>
+                        </div>
+                        <div id="subject-pool" class="mt-3">
+                            <!-- Subjects will be loaded here -->
+                        </div>
+                        <div class="mt-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="mb-0">Delete Box</h6>
+                                <button id="undo-btn" class="btn btn-sm btn-warning" disabled>Undo</button>
+                            </div>
+                            <div id="delete-box" class="border rounded p-3 text-center" style="min-height: 100px; background-color: #f8f9fa;">
+                                <div class="text-muted">Drag here to delete</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+const days = JSON.parse('{{ days|tojson|safe }}');
+const rooms = JSON.parse('{{ rooms_json|tojson|safe }}');
+
+document.addEventListener('DOMContentLoaded', function() {
+    const routineTable = document.getElementById('routine-table');
+    const teachers = JSON.parse('{{ teachers_json|tojson|safe }}');
+    const rooms = JSON.parse('{{ rooms_json|tojson|safe }}');
+    const courses = JSON.parse('{{ courses_by_id|tojson|safe }}');
+    const teachersById = JSON.parse('{{ teachers_by_id|tojson|safe }}');
+    const teacherSelect = document.getElementById('teacher-select');
+    const subjectPool = document.getElementById('subject-pool');
+    const deleteBox = document.getElementById('delete-box');
+    const undoBtn = document.getElementById('undo-btn');
+    let lastDeleted = null;
+
+    // Load subjects when teacher is selected
+    teacherSelect.addEventListener('change', function() {
+        const teacherId = this.value;
+        if (!teacherId) {
+            subjectPool.innerHTML = '';
+            return;
+        }
+        // Get teacher's courses from backend
+        fetch(`/api/teacher_courses/${teacherId}`)
+            .then(response => response.json())
+            .then(data => {
+        subjectPool.innerHTML = '';
+                // Count how many times each subject is already placed in the routine
+                const routineCounts = {};
+                document.querySelectorAll('.routine-slot').forEach(cell => {
+                    const code = cell.querySelector('.fw-bold')?.textContent;
+                    const callsign = cell.querySelector('.text-muted')?.textContent;
+                    if (code && callsign) {
+                        // Shared class count
+                        if (callsign === 'PC/HM') {
+                            routineCounts[code + '_shared'] = (routineCounts[code + '_shared'] || 0) + 1;
+                        } else if (callsign === teachersById[teacherId].callsign) {
+                            routineCounts[code + '_regular'] = (routineCounts[code + '_regular'] || 0) + 1;
+                        }
+                    }
+                });
+                data.forEach(course => {
+                    const subjectBox = document.createElement('div');
+                    subjectBox.className = 'subject-box mb-2 p-2 border rounded position-relative';
+                    subjectBox.draggable = true;
+                    // Use different keys for shared and regular
+                    const isShared = !!course.shared_callsign;
+                    const key = course.code + (isShared ? '_shared' : '_regular');
+                    const remainingClasses = course.class_count - (routineCounts[key] || 0);
+                    subjectBox.innerHTML = `
+                        <div class="fw-bold">${course.code}</div>
+                        <div class="text-muted small">${course.name}</div>
+                        <div class="text-primary fw-bold small">${course.type}</div>
+                        <div class="class-counter" data-course-id="${course.id}" data-teacher-id="${teacherId}" ${isShared ? 'data-shared="true"' : ''}>${remainingClasses}</div>
+                        ${isShared ? `<div class="shared-callsign">${course.shared_callsign}</div>` : ''}
+                    `;
+                    // Add title attribute for hover effect
+                    subjectBox.title = `${course.code} - ${course.name} (${course.type})`;
+                    if (isShared) {
+                        subjectBox.setAttribute('data-shared', 'true');
+                    }
+                    subjectBox.dataset.credit = course.credit;
+                    subjectBox.dataset.courseId = course.id;
+                    subjectBox.dataset.teacherId = teacherId;
+                    // Disable if no classes left
+                    const counter = subjectBox.querySelector('.class-counter');
+                    if (parseInt(counter.textContent) <= 0) {
+                        subjectBox.style.opacity = '0.5';
+                        subjectBox.style.pointerEvents = 'none';
+                    }
+                    subjectBox.addEventListener('dragstart', function(e) {
+                        if (parseInt(this.querySelector('.class-counter').textContent) <= 0) {
+                            e.preventDefault();
+                            return;
+                        }
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            type: 'subject',
+                            courseId: course.id,
+                            teacherId: teacherId,
+                            credit: parseInt(this.querySelector('.class-counter').textContent),
+                            shared: isShared,
+                            shared_callsign: isShared ? course.shared_callsign : null
+                        }));
+                        this.classList.add('dragging');
+                    });
+                    subjectBox.addEventListener('dragend', function() {
+                this.classList.remove('dragging');
+                    });
+                    subjectPool.appendChild(subjectBox);
+                });
+            });
+        });
+
+    // --- Add swap functionality for routine-slot cells ---
+    let swapSource = null;
+
+    function handleCellDragStart(e) {
+        if (this.innerHTML.trim() === '-') {
+            e.preventDefault();
+            return;
+        }
+        swapSource = this;
+        e.dataTransfer.setData('text/plain', JSON.stringify({
+            type: 'swap',
+            day: this.dataset.day,
+            slot: this.dataset.slot,
+            room: this.dataset.room,
+            html: this.innerHTML
+        }));
+        this.classList.add('dragging');
+    }
+
+    function handleCellDragOver(e) {
+        e.preventDefault();
+        this.classList.add('drag-over');
+    }
+
+    function handleCellDragLeave(e) {
+        this.classList.remove('drag-over');
+    }
+
+    function handleCellDrop(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+        if (data.type === 'swap' && swapSource && swapSource !== this) {
+            // Swap contents
+            const temp = this.innerHTML;
+            this.innerHTML = data.html;
+            swapSource.innerHTML = temp;
+        } else {
+            handleDrop.call(this, e); // fallback to normal drop
+        }
+        swapSource?.classList.remove('dragging');
+        swapSource = null;
+    }
+
+    // Attach swap handlers to routine-slot cells (except lunch/meeting)
+    document.querySelectorAll('.routine-slot:not([data-lunch="true"]):not([data-meeting="true"])').forEach(cell => {
+        cell.draggable = true;
+        cell.addEventListener('dragstart', handleCellDragStart);
+        cell.addEventListener('dragover', handleCellDragOver);
+        cell.addEventListener('dragleave', handleCellDragLeave);
+        cell.addEventListener('drop', handleCellDrop);
+    });
+
+    // Delete box functionality
+    deleteBox.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('drag-over');
+        swapSource = null; // Prevent swap on delete
+    });
+
+    deleteBox.addEventListener('dragleave', function() {
+            this.classList.remove('drag-over');
+        });
+
+    deleteBox.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+        // Accept both 'swap' and 'slot' types for delete
+        if ((data.type === 'slot' || data.type === 'swap') && data.day && data.slot && data.room) {
+            const cell = document.querySelector(`[data-day="${data.day}"][data-slot="${data.slot}"][data-room="${data.room}"]`);
+            if (cell && cell.innerHTML.trim() !== '-') {
+                // Find the course code and teacher callsign from the cell
+                const courseCode = cell.querySelector('.fw-bold')?.textContent;
+                const teacherCallsign = cell.querySelector('.text-muted')?.textContent;
+                // Find the teacher ID from callsign
+                let teacherId = Object.values(teachersById).find(t => t.callsign === teacherCallsign)?.id;
+                // Find the course ID from code
+                const courseId = Object.values(courses).find(c => c.code === courseCode)?.id;
+                // Determine if shared (if callsign contains '/')
+                const isShared = teacherCallsign && teacherCallsign.includes('/');
+                let counter;
+                if (isShared) {
+                    // For shared, update the first matching shared counter (any teacher)
+                    counter = document.querySelector(`.class-counter[data-course-id="${courseId}"][data-shared="true"]`);
+                    teacherId = counter ? counter.getAttribute('data-teacher-id') : null;
+                } else {
+                    counter = document.querySelector(`.class-counter[data-course-id="${courseId}"][data-teacher-id="${teacherId}"]:not([data-shared])`);
+                }
+                if (counter) {
+                    const currentCount = parseInt(counter.textContent);
+                    counter.textContent = currentCount + 1;
+                    // Re-enable the subject box if it was disabled
+                    const subjectBox = counter.closest('.subject-box');
+                    if (currentCount === 0) {
+                        subjectBox.style.opacity = '1';
+                        subjectBox.style.pointerEvents = 'auto';
+                    }
+                }
+                lastDeleted = {
+                    type: 'slot',
+                    cell: cell,
+                    content: cell.innerHTML,
+                    data: data,
+                    courseId: courseId,
+                    teacherId: teacherId,
+                    isShared: isShared
+                };
+                cell.innerHTML = '-';
+                undoBtn.disabled = false;
+            }
+        }
+    });
+
+    // Undo button functionality
+    undoBtn.addEventListener('click', function() {
+        if (!lastDeleted) return;
+        if (lastDeleted.type === 'slot') {
+            // Find the course code and teacher callsign from the deleted content
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = lastDeleted.content;
+            const courseCode = tempDiv.querySelector('.fw-bold')?.textContent;
+            const teacherCallsign = tempDiv.querySelector('.text-muted')?.textContent;
+            // Find the teacher ID from callsign
+            let teacherId = Object.values(teachersById).find(t => t.callsign === teacherCallsign)?.id;
+            // Find the course ID from code
+            const courseId = Object.values(courses).find(c => c.code === courseCode)?.id;
+            // Determine if shared (if callsign contains '/')
+            const isShared = teacherCallsign && teacherCallsign.includes('/');
+            let counter;
+            if (isShared) {
+                // For shared, update the first matching shared counter (any teacher)
+                counter = document.querySelector(`.class-counter[data-course-id="${courseId}"][data-shared="true"]`);
+                teacherId = counter ? counter.getAttribute('data-teacher-id') : null;
+            } else {
+                counter = document.querySelector(`.class-counter[data-course-id="${courseId}"][data-teacher-id="${teacherId}"]:not([data-shared])`);
+            }
+            if (counter) {
+                const currentCount = parseInt(counter.textContent);
+                counter.textContent = currentCount - 1;
+                // Disable the subject box if no classes left
+                const subjectBox = counter.closest('.subject-box');
+                if (currentCount - 1 <= 0) {
+                    subjectBox.style.opacity = '0.5';
+                    subjectBox.style.pointerEvents = 'none';
+                }
+            }
+            lastDeleted.cell.innerHTML = lastDeleted.content;
+        }
+        lastDeleted = null;
+        this.disabled = true;
+    });
+
+    function handleDragStart(e) {
+        if (this.innerHTML.trim() === '-') {
+            e.preventDefault();
+            return;
+        }
+        e.dataTransfer.setData('text/plain', JSON.stringify({
+            type: 'slot',
+            day: this.dataset.day,
+            slot: this.dataset.slot,
+            room: this.dataset.room
+        }));
+        this.classList.add('dragging');
+    }
+
+    function handleDragOver(e) {
+        e.preventDefault();
+    }
+
+    function handleDrop(e) {
+        e.preventDefault();
+        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+        if (data.type === 'subject') {
+            const courseId = data.courseId;
+            const teacherId = data.teacherId;
+            const course = courses[courseId];
+            const teacher = teachersById[teacherId];
+            let callsign = teacher.callsign;
+            if (data.shared_callsign) {
+                callsign = data.shared_callsign;
+            }
+            this.innerHTML = `
+                <div class="fw-bold">${course.code}</div>
+                <div class="text-muted">${callsign}</div>
+            `;
+            // Decrease the correct counter
+            let counter;
+            if (data.shared) {
+                counter = document.querySelector(`.class-counter[data-course-id="${courseId}"][data-teacher-id="${teacherId}"][data-shared="true"]`);
+            } else {
+                counter = document.querySelector(`.class-counter[data-course-id="${courseId}"][data-teacher-id="${teacherId}"]:not([data-shared])`);
+            }
+            if (counter) {
+                const currentCount = parseInt(counter.textContent);
+                counter.textContent = currentCount - 1;
+                // Disable the subject box if no classes left
+                const subjectBox = counter.closest('.subject-box');
+                if (currentCount - 1 <= 0) {
+                    subjectBox.style.opacity = '0.5';
+                    subjectBox.style.pointerEvents = 'none';
+                }
+            }
+        }
+    }
+
+    // --- Routine Save/Load ---
+    function getRoutineState() {
+        const slots = [];
+        document.querySelectorAll('.routine-slot').forEach(cell => {
+            slots.push({
+                day: cell.dataset.day,
+                slot: cell.dataset.slot,
+                room: cell.dataset.room,
+                html: cell.innerHTML
+            });
+        });
+        return {
+            slots,
+            title: document.getElementById('routine-title').value,
+            date: document.getElementById('routine-date').value
+        };
+    }
+    function setRoutineState(state) {
+        if (!state) return;
+        if (state.title !== undefined) document.getElementById('routine-title').value = state.title;
+        if (state.date !== undefined) document.getElementById('routine-date').value = state.date;
+        if (state.slots) {
+            state.slots.forEach(slot => {
+                const cell = document.querySelector(`.routine-slot[data-day="${slot.day}"][data-slot="${slot.slot}"][data-room="${slot.room}"]`);
+                if (cell) cell.innerHTML = slot.html;
+            });
+        }
+    }
+    // Save Routine to backend
+    const saveBtn = document.getElementById('save-routine-btn');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', function() {
+            const state = getRoutineState();
+            fetch('/api/save_routine_state', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(state)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert('Routine saved to server!');
+            })
+            .catch(() => alert('Failed to save routine!'));
+        });
+    }
+    // Load Routine from backend on page load
+    window.addEventListener('DOMContentLoaded', function() {
+        fetch('/api/load_routine_state')
+            .then(res => res.json())
+            .then(state => {
+                if (state && Object.keys(state).length > 0) {
+                    setRoutineState(state);
+                }
+            });
+    });
+    // Clear button
+    document.getElementById('clear-routine-btn').addEventListener('click', function() {
+        document.querySelectorAll('.routine-slot').forEach(cell => {
+            if (!cell.dataset.lunch && !cell.dataset.meeting) cell.innerHTML = '-';
+        });
+    });
+    // PDF button
+    document.getElementById('download-pdf-btn').addEventListener('click', async function() {
+        try {
+            const slots = [
+                '9:10-10:00 AM',
+                '10:10-11:00 AM',
+                '11:10-12:00 PM',
+                '12:10-1:00 PM',
+                '1:00-1:50 PM',
+                '2:00-2:50 PM',
+                '3:00-3:50 PM',
+                '4:00-4:50 PM'
+            ];
+            const routine = {};
+            days.forEach(day => {
+                routine[day] = {};
+                rooms.forEach(room => {
+                    const slotVals = [];
+                    for (let s = 0; s < slots.length; s++) {
+                        const cell = document.querySelector(`.routine-slot[data-day="${day}"][data-slot="${s}"][data-room="${room.id}"]`);
+                        if (cell && cell.dataset.lunch !== 'true' && cell.dataset.meeting !== 'true') {
+                            slotVals.push(cell.innerText.trim());
+                        } else if (cell && cell.dataset.lunch === 'true') {
+                            slotVals.push('LUNCH BREAK');
+                        } else if (cell && cell.dataset.meeting === 'true') {
+                            slotVals.push('Academic Committee Meeting');
+                        } else {
+                            slotVals.push('-');
+                        }
+                    }
+                    routine[day][room.id] = slotVals;
+                });
+            });
+            const title = document.getElementById('routine-title').value;
+            const date = document.getElementById('routine-date').value;
+            const resp = await fetch('/download_pdf', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ routine, days, rooms, slots, title, date })
+            });
+            if (!resp.ok) {
+                alert('Failed to generate PDF!');
+                return;
+            }
+            const blob = await resp.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'routine.pdf';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (err) {
+            alert('PDF download failed: ' + err);
+        }
+    });
+    // Export Routine
+    document.getElementById('export-routine-btn').addEventListener('click', function() {
+        const state = getRoutineState();
+        const blob = new Blob([JSON.stringify(state, null, 2)], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'routine.json';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+    });
+    // Import Routine
+    document.getElementById('import-routine-btn').addEventListener('click', function() {
+        document.getElementById('import-routine-input').click();
+    });
+    document.getElementById('import-routine-input').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+            try {
+                const state = JSON.parse(evt.target.result);
+                setRoutineState(state);
+                localStorage.setItem('routine_state', JSON.stringify(state));
+                alert('Routine imported successfully!');
+            } catch (err) {
+                alert('Invalid routine file!');
+            }
+        };
+        reader.readAsText(file);
+    });
+});
+
+function formatCallsign(callsign, isShared) {
+    if (isShared) {
+        // If it's already in XX/YY format, return as is
+        if (callsign.includes('/')) {
+            return callsign;
+        }
+        // Otherwise, format it as XX/YY
+        return callsign.replace(/([A-Z]{2})([A-Z]{2})/, '$1/$2');
+    }
+    return callsign;
+}
+
+function renderCell(cell, course, teacher) {
+    cell.innerHTML = `
+        <div class="fw-bold">${course.code}</div>
+        <div class="text-muted">${formatCallsign(teacher.callsign, course.isShared)}</div>
+    `;
+}
+</script>
+
+<style>
+.routine-slot {
+    min-width: 120px;
+    height: 60px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+/* Add thicker borders for day rows */
+#routine-table tbody tr.day-end {
+    border-bottom: 3px solid #495057;
+}
+
+#routine-table tbody tr:first-child {
+    border-top: 3px solid #495057;
+}
+
+.routine-slot:hover:not([data-lunch="true"]):not([data-meeting="true"]) {
+    background-color: #f0f0f0;
+}
+
+.routine-slot.dragging {
+    opacity: 0.5;
+}
+
+.subject-box {
+    cursor: move;
+    transition: all 0.2s ease;
+    background-color: white;
+    position: relative;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+}
+
+.subject-box:hover {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.subject-box.dragging {
+    opacity: 0.5;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.subject-box[data-shared="true"] {
+    background-color: #e3f2fd;
+    border-left: 4px solid #2196f3;
+}
+
+.class-counter {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.shared-callsign {
+    position: absolute;
+    top: 5px;
+    right: 35px;
+    background-color: #2196f3;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.7em;
+    font-weight: bold;
+}
+
+#delete-box {
+    transition: all 0.2s;
+}
+
+#delete-box.drag-over {
+    background-color: #dc3545 !important;
+    color: white;
+}
+
+#sticky-subjects {
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+}
+
+.pdf-export-area {
+    width: 190mm !important;
+    max-width: 190mm !important;
+    padding: 10mm 8mm 10mm 8mm !important;
+    font-size: 9.5px !important;
+    background: white !important;
+}
+.pdf-export-area table {
+    width: 100% !important;
+    font-size: 9.5px !important;
+    border-collapse: collapse !important;
+    table-layout: fixed !important;
+}
+.pdf-export-area th, .pdf-export-area td {
+    padding: 3px 2px !important;
+    border: 1px solid #222 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    word-break: break-word;
+}
+.pdf-export-area .mb-4.text-center {
+    margin-bottom: 18px !important;
+    text-align: center !important;
+    font-family: Arial, sans-serif !important;
+}
+@media print {
+    /* Add any print-specific overrides if needed */
+}
+
+.routine-slot {
+    transition: background-color 0.2s ease;
+}
+
+.routine-slot.drag-over {
+    background-color: #e9ecef;
+}
+
+#delete-box {
+    transition: all 0.2s ease;
+}
+
+#delete-box.drag-over {
+    background-color: #dc3545 !important;
+    color: white;
+}
+
+#delete-box.drag-over .text-muted {
+    color: rgba(255,255,255,0.8) !important;
+}
+</style>
+{% endblock %} 

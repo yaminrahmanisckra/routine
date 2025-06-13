@@ -1,0 +1,1 @@
+([('run', '/Users/isckra/Documents/Routine Maker/dist/run', 'EXECUTABLE')],)

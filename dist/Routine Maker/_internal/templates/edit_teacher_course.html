@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Edit Assignment</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">{{ form.teacher.label }} {{ form.teacher(class_='form-select') }}</div>
+        <div class="mb-3">{{ form.courses.label }} {{ form.courses(class_='form-select') }}</div>
+        <div class="mb-3">{{ form.part.label }} {{ form.part(class_='form-select') }}</div>
+        {{ form.submit(class_='btn btn-primary') }}
+    </form>
+    <a href="{{ url_for('assign_course') }}" class="btn btn-secondary mt-2">Back</a>
+</div>
+{% endblock %} 

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Academic Year & Session Entry</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">{{ form.year.label }} {{ form.year(class_='form-control') }}</div>
+        <div class="mb-3">{{ form.session.label }} {{ form.session(class_='form-control') }}</div>
+        {{ form.submit(class_='btn btn-primary') }}
+    </form>
+    <hr>
+    <h4>All Academic Years</h4>
+    <ul class="list-group">
+        {% for y in years %}
+        <li class="list-group-item">{{ y.year }} ({{ y.session }})</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %} 

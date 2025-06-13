@@ -1,0 +1,876 @@
+{
+  "slots": [
+    {
+      "day": "Sunday",
+      "slot": "0",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "1",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "2",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "3",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "4",
+      "room": "1",
+      "html": "LUNCH BREAK"
+    },
+    {
+      "day": "Sunday",
+      "slot": "5",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "6",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "7",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "0",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "1",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "2",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "3",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "5",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "6",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "7",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "0",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "1",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "2",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "3",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "5",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "6",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "7",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "0",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "1",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "2",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "3",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "5",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "6",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Sunday",
+      "slot": "7",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "0",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "1",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "2",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "3",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "4",
+      "room": "1",
+      "html": "LUNCH BREAK"
+    },
+    {
+      "day": "Monday",
+      "slot": "5",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "6",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "7",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "0",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "1",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "2",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "3",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "5",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "6",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "7",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "0",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "1",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "2",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "3",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "5",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "6",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "7",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "0",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "1",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "2",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "3",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "5",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "6",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Monday",
+      "slot": "7",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "0",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "1",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "2",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "3",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "4",
+      "room": "1",
+      "html": "LUNCH BREAK"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "5",
+      "room": "1",
+      "html": "Academic Committee Meeting"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "6",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "7",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "0",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "1",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "2",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "3",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "5",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "6",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "7",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "0",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "1",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "2",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "3",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "5",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "6",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "7",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "0",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "1",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "2",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "3",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "5",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "6",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Tuesday",
+      "slot": "7",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "0",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "1",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "2",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "3",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "4",
+      "room": "1",
+      "html": "LUNCH BREAK"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "5",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "6",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "7",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "0",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "1",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "2",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "3",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "5",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "6",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "7",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "0",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "1",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "2",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "3",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "5",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "6",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "7",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "0",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "1",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "2",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "3",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "5",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "6",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Wednesday",
+      "slot": "7",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "0",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "1",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "2",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "3",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "4",
+      "room": "1",
+      "html": "LUNCH BREAK"
+    },
+    {
+      "day": "Thursday",
+      "slot": "5",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "6",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "7",
+      "room": "1",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "0",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "1",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "2",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "3",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "5",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "6",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "7",
+      "room": "2",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "0",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "1",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "2",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "3",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "5",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "6",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "7",
+      "room": "3",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "0",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "1",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "2",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "3",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "5",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "6",
+      "room": "4",
+      "html": "-"
+    },
+    {
+      "day": "Thursday",
+      "slot": "7",
+      "room": "4",
+      "html": "-"
+    }
+  ],
+  "title": "1st Term and 2nd Term 2025",
+  "date": "2025-07-01"
+}
